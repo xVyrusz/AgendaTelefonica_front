@@ -1,24 +1,39 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { PhoneNumberProvider } from "./context/PhoneNumbersContext";
+
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import { AuthProvider } from "./context/AuthContext";
+import HomePage from "./pages/HomePage";
+import PhoneNumberFormPage from "./pages/PhoneNumberFormPage";
+import PhoneNumberPage from "./pages/PhoneNumberPage";
+
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<h1>Home Page</h1>} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/phoneNumbers" element={<h1>Phone Numbers</h1>} />
-          <Route
-            path="/phoneNumbers/:id"
-            element={<h1>Update Phone Number</h1>}
-          />
-          <Route path="/add-phoneNumbers" element={<h1>Add Phone Number</h1>} />
-        </Routes>
-      </BrowserRouter>
+      <PhoneNumberProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/phoneNumbers" element={<PhoneNumberPage />} />
+              <Route
+                path="/phoneNumbers/:id"
+                element={<PhoneNumberFormPage />}
+              />
+              <Route
+                path="/add-phoneNumbers"
+                element={<PhoneNumberFormPage />}
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </PhoneNumberProvider>
     </AuthProvider>
   );
 }
