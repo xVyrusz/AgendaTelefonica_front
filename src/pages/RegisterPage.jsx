@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function RegisterPage() {
   const {
@@ -27,7 +27,11 @@ function RegisterPage() {
           <div className="col-md-6">
             <div className="form-container bg-success p-4 rounded">
               <h2 className="text-center">Register</h2>
-              {<div className="bg-danger text-light">{registerErrors.message}</div>}
+              {
+                <div className="bg-danger text-light">
+                  {registerErrors.message}
+                </div>
+              }
               <form onSubmit={onSubmit}>
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">
@@ -79,6 +83,12 @@ function RegisterPage() {
               </form>
             </div>
           </div>
+          <p className="row justify-content-center">
+            Already have an account?{" "}
+            <Link to="/login" className="row justify-content-center">
+              Login
+            </Link>
+          </p>
         </div>
       </div>
     </div>
