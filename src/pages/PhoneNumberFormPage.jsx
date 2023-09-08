@@ -1,22 +1,46 @@
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { usePhoneNumbers } from "../context/PhoneNumbersContext";
 
 function PhoneNumberFormPage() {
   const [selectedGroup, setSelectedGroup] = useState("");
+  const { createPhoneNumber, getPhoneNumber, updatePhoneNumber } =
+    usePhoneNumbers();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
 
-  const { createPhoneNumber } = usePhoneNumbers();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    async function loadPhoneNumber() {
+      if (params.id) {
+        const phoneNumber = await getPhoneNumber(params.id);
+        setValue("email", phoneNumber.Response.email);
+        setValue("name", phoneNumber.Response.name);
+        setValue("address", phoneNumber.Response.address);
+        setValue("group", phoneNumber.Response.group);
+        setValue("phoneNumber", phoneNumber.Response.phoneNumber);
+      }
+    }
+    loadPhoneNumber();
+  });
 
   const onSubmit = handleSubmit(async (values) => {
-    createPhoneNumber(values);
+    if (params.id) {
+      updatePhoneNumber(params.id, values);
+    } else {
+      createPhoneNumber(values);
+    }
+    navigate("/phoneNumbers");
   });
+
   return (
     <div className="container-fluid dark-bg text-light py-5 min-vh-100 d-flex align-items-center">
       <div className="container">

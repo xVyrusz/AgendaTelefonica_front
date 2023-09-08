@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { usePhoneNumbers } from "../context/PhoneNumbersContext";
+import { Link } from "react-router-dom";
 
 function PhoneNumberPage() {
-  const { getPhoneNumbers, phoneNumbers } = usePhoneNumbers();
+  const { getPhoneNumbers, phoneNumbers, deletePhoneNumber } =
+    usePhoneNumbers();
   useEffect(() => {
     getPhoneNumbers();
   }, []);
 
   const listPhoneNumbers = phoneNumbers.Response;
-  console.log(listPhoneNumbers);
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
       {listPhoneNumbers ? (
@@ -32,6 +33,21 @@ function PhoneNumberPage() {
                   </p>
                   <p className="card-text">Group: {dataItem.group}</p>
                 </div>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm mx-2 my-2"
+                  onClick={() => {
+                    deletePhoneNumber(dataItem._id);
+                  }}
+                >
+                  Delete
+                </button>
+                <Link
+                  className="btn btn-warning btn-sm mx-2 my-2"
+                  to={`/phoneNumbers/${dataItem._id}`}
+                >
+                  Edit
+                </Link>
               </div>
             </div>
           ))}

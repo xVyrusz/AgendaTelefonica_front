@@ -2,6 +2,9 @@ import { createContext, useContext, useState } from "react";
 import {
   createPhoneNumberRequest,
   getPhoneNumberRequest,
+  deletePhoneNumberRequest,
+  getPhoneNumbersRequest,
+  updatePhoneNumberRequest,
 } from "../api/phoneNumbers";
 
 const PhoneNumberContext = createContext();
@@ -21,22 +24,57 @@ export function PhoneNumberProvider({ children }) {
 
   const getPhoneNumbers = async () => {
     try {
-      const res = await getPhoneNumberRequest();
+      const res = await getPhoneNumbersRequest();
       setPhoneNumbers(res.data);
-      return
+      return;
     } catch (error) {
       console.log(error);
     }
   };
 
   const createPhoneNumber = async (phoneNumber) => {
-    const res = await createPhoneNumberRequest(phoneNumber);
-    console.log(res);
+    await createPhoneNumberRequest(phoneNumber);
+  };
+
+  const deletePhoneNumber = async (_id) => {
+    try {
+      const res = await deletePhoneNumberRequest(_id);
+      if (res.status === 201)
+        setPhoneNumbers(
+          phoneNumbers.Response.filter((phoneNumber) => phoneNumber._id !== _id)
+        );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getPhoneNumber = async (_id) => {
+    try {
+      const res = await getPhoneNumberRequest(_id);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updatePhoneNumber = async (_id, phoneNumber) => {
+    try {
+      await updatePhoneNumberRequest(_id, phoneNumber);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <PhoneNumberContext.Provider
-      value={{ getPhoneNumbers, phoneNumbers, createPhoneNumber }}
+      value={{
+        getPhoneNumbers,
+        getPhoneNumber,
+        deletePhoneNumber,
+        updatePhoneNumber,
+        phoneNumbers,
+        createPhoneNumber,
+      }}
     >
       {children}
     </PhoneNumberContext.Provider>

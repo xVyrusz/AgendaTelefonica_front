@@ -9,12 +9,14 @@ import PhoneNumberFormPage from "./pages/PhoneNumberFormPage";
 import PhoneNumberPage from "./pages/PhoneNumberPage";
 
 import ProtectedRoute from "./ProtectedRoute";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <AuthProvider>
       <PhoneNumberProvider>
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
