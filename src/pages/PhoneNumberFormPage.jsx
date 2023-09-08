@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
+import { usePhoneNumbers } from "../context/PhoneNumbersContext";
 
 function PhoneNumberFormPage() {
   const [selectedGroup, setSelectedGroup] = useState("");
@@ -11,8 +12,10 @@ function PhoneNumberFormPage() {
     formState: { errors },
   } = useForm();
 
+  const { createPhoneNumber } = usePhoneNumbers();
+
   const onSubmit = handleSubmit(async (values) => {
-    console.log(values);
+    createPhoneNumber(values);
   });
   return (
     <div className="container-fluid dark-bg text-light py-5 min-vh-100 d-flex align-items-center">
